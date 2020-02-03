@@ -1,10 +1,12 @@
 from tkinter import *
 from tkinter import filedialog
+from tkinter import ttk
 import os
 
 #-------------------------------------------------------------------------
 directory = r""
 files = []
+buttons_names = []
 #-------------------------------------------------------------------------
 def direct():
     global directory
@@ -16,23 +18,25 @@ def direct():
         print(files)
         if not files:
             directory = r""
-            label_debug.config(text="Dir_Error_No_Files",fg="Red")
+            label_debug.config(text = "Dir_Error_No_Files",fg = "Red")
         else:
-            label_debug.config(text="Dir_Selected!",fg="Blue")
+            label_debug.config(text = "Dir_Selected!",fg = "Blue")
     except:
-        label_debug.config(text="Dir_Error",fg="Red")
-        
-        
+        label_debug.config(text = "Dir_Error",fg = "Red")
 
+def Thor(arg):
+    return "selected" in arg.state()
+        
 def new_wind():
     global label_debug
     global files
+    global buttons_names
     try:
         global directory
         new_app = Tk()
         new_app.title("Select Files")
         new_app.geometry("400x150")
-        buttons_names = [Checkbutton(new_app, text = name) for name in files]
+        buttons_names = [ttk.Checkbutton(new_app, text = name, variable="") for name in files]
         line = -1
         col = 1
         for button in buttons_names:
@@ -41,10 +45,12 @@ def new_wind():
                 line += 1
             else:
                 col = 1
-            button.grid(row = line, column = col) 
+            button.grid(row = line, column = col)
         new_app.mainloop()
-    except:
-        label_debug.config(text="Dir_Error",fg="Red")
+    except Exception as e:
+        print (e)
+        label_debug.config(text = "Dir_Error",fg = "Red")
+
 
 
 def run():
@@ -71,9 +77,7 @@ label_files = Label(app, text = "Choose files")
 label_files.grid(row = 2, column = 0)
 
 label_debug = Label(app,font = ("Calibri",10))
-label_debug.grid(row=3, column=2)
-
-
+label_debug.grid(row = 3, column = 2)
 
 
 
