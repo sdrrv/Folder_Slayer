@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import filedialog
-from tkinter import ttk
 import os
 
 #-------------------------------------------------------------------------
@@ -14,18 +13,17 @@ def direct():
     global files
     try:
         directory = filedialog.askdirectory()
-        files = set([file.split(".")[-1] for file in os.listdir(directory) if "." in file])
+        files = [[file.split(".")[-1], IntVar()] for file in os.listdir(directory) if "." in file]
+        files=thor(files)
         print(files)
         if not files:
             directory = r""
             label_debug.config(text = "Dir_Error_No_Files",fg = "Red")
         else:
             label_debug.config(text = "Dir_Selected!",fg = "Blue")
-    except:
+    except Exception as e:
+        print(e)
         label_debug.config(text = "Dir_Error",fg = "Red")
-
-def Thor(arg):
-    return "selected" in arg.state()
         
 def new_wind():
     global label_debug
@@ -36,7 +34,7 @@ def new_wind():
         new_app = Tk()
         new_app.title("Select Files")
         new_app.geometry("400x150")
-        buttons_names = [ttk.Checkbutton(new_app, text = name, variable="") for name in files]
+        buttons_names = [Checkbutton(new_app, text = files[i][0], onvalue = 1, offvalue = 0, variable = files[i][1]) for i in range(len(files))]
         line = -1
         col = 1
         for button in buttons_names:
@@ -46,12 +44,24 @@ def new_wind():
             else:
                 col = 1
             button.grid(row = line, column = col)
+        button_check = Button(new_app, text = "Select", font=("Calibri",10), activebackground = "blue", relief = "groove", command = check_mate)
+        button_check.grid(row = 0, column = 2)
         new_app.mainloop()
     except Exception as e:
         print (e)
         label_debug.config(text = "Dir_Error",fg = "Red")
 
+def check_mate():
+    for i in files:
+        print(i[1].get())
 
+
+def thor(arg):
+    result=[]
+    for i in arg:
+        if i not in result:
+            result.append(i)
+    return result
 
 def run():
     pass
