@@ -13,8 +13,7 @@ def direct():
     global files
     try:
         directory = filedialog.askdirectory()
-        #files = [[file.split(".")[-1], IntVar()] for file in os.listdir(directory) if "." in file]
-        #files=thor(files)
+        
         files = list(map(lambda a: [a, IntVar()], thor(file.split(".")[-1] for file in os.listdir(directory) if "." in file)))
         print(files)
         if not files:
@@ -66,6 +65,7 @@ def thor(arg):
     return result
 
 def run():
+
     pass
 #-------------------------------------------------------------------------
 app = Tk()
@@ -96,3 +96,10 @@ label_debug.grid(row = 3, column = 2)
 #-------------------------------------------------------------------------
 app.mainloop()
 
+def oi():
+    cd = os.listdir(directory)
+    for e in files:
+        if e[1].get() == 1:
+            #criar pasta
+            pass
+    #for i in cd:
