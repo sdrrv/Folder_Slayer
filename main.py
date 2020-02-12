@@ -44,7 +44,7 @@ def new_wind():
                 line += 1
             else:
                 col = 1
-            button.grid(row = line, column = col)
+            button.grid(row = line, column = col, padx = 10)
         button_check = Button(new_app, text = "Select all", font=("Calibri",10), activebackground = "blue", relief = "groove", command = select_all)
         button_check.grid(row = 0, column = 2)
         new_app.mainloop()
@@ -67,15 +67,21 @@ def thor(arg):
 
 def run():
     try:
+        count_folder=0
+        count_files=0
         cd = [file for file in os.listdir(directory) if "." in file]
         for e in files:
             if e[1].get() == 1:
                 new_path = directory + "/" + e[0]
-                os.makedirs(new_path)           
+                os.makedirs(new_path)
+                count_folder+=1
+
         for file in cd:
             f_type = file_type(file)
             if os.path.exists(directory + "/" + f_type):
                 os.replace(directory + "/" + file, directory + "/" + f_type + "/" + file)
+                count_files+=1
+        label_debug.config(text = f"Finished with:\n{count_folder} Folders Created\n{count_files} Files Moved",fg = "Green")
     except Exception as e:
         print (e)
         label_debug.config(text = "Run_Error",fg = "Red")
