@@ -13,8 +13,9 @@ def direct():
     global files
     try:
         directory = filedialog.askdirectory()
-        files = [[file.split(".")[-1], IntVar()] for file in os.listdir(directory) if "." in file]
-        files=thor(files)
+        #files = [[file.split(".")[-1], IntVar()] for file in os.listdir(directory) if "." in file]
+        #files=thor(files)
+        files = list(map(lambda a: [a, IntVar()], thor(file.split(".")[-1] for file in os.listdir(directory) if "." in file)))
         print(files)
         if not files:
             directory = r""
@@ -31,7 +32,7 @@ def new_wind():
     global buttons_names
     try:
         global directory
-        new_app = Tk()
+        new_app = Toplevel(app)
         new_app.title("Select Files")
         new_app.geometry("400x150")
         buttons_names = [Checkbutton(new_app, text = files[i][0], onvalue = 1, offvalue = 0, variable = files[i][1]) for i in range(len(files))]
@@ -44,16 +45,17 @@ def new_wind():
             else:
                 col = 1
             button.grid(row = line, column = col)
-        button_check = Button(new_app, text = "Select", font=("Calibri",10), activebackground = "blue", relief = "groove", command = check_mate)
+        button_check = Button(new_app, text = "Select all", font=("Calibri",10), activebackground = "blue", relief = "groove", command = select_all)
         button_check.grid(row = 0, column = 2)
         new_app.mainloop()
     except Exception as e:
         print (e)
         label_debug.config(text = "Dir_Error",fg = "Red")
 
-def check_mate():
-    for i in files:
-        print(i[1].get())
+def select_all():
+    global buttons_names
+    for button in buttons_names:
+        button.select()
 
 
 def thor(arg):
